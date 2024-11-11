@@ -20,6 +20,7 @@
         const gridSize = 50;
         let isDragging = false;
         let draggedCells = [];
+        let time= 0
 
         function drawGrid() {
             for (let x = 0; x <= canvas.width; x += gridSize) {
@@ -46,7 +47,7 @@
 
         function updateScore(points) {
             score += points;
-            scoreBoard.innerHTML = `Remaining words: ${score}`;
+            scoreBoard.innerHTML = `Best time: ${ localStorage.getItem('HighScore') ? localStorage.getItem('HighScore') : 0} \n Remaining words: ${score}`;
         }
 
         const timer = document.createElement('div');
@@ -63,6 +64,7 @@
             }
             const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
             timer.innerHTML = `Time Elapsed: ${elapsedTime}s`;
+            time = elapsedTime;
         }
 
         setInterval(timerFunc, 1000);
@@ -225,6 +227,7 @@
                     clearInterval(timerFunc); 
                     timerFunc=undefined;                   
                     hardstop = true
+                    localStorage.getItem('HighScore') ? localStorage.setItem('HighScore', Math.min(localStorage.getItem('score'), time)) : localStorage.setItem('HighScore', time);
                 }
             } else {
                 cleanDraggedCells();
